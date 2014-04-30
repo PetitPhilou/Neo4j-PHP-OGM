@@ -670,7 +670,15 @@ class EntityManager
         foreach ($meta->getIndexedProperties() as $property) {
             foreach ($property->getIndexes() as $index) {
                 $realIndex = $this->createIndex($index->name, $index->type);
-                $realIndex->add($node, $index->field, $property->getValue($entity));
+                $property_value = $property->getValue($entity);
+                if( is_array($property_value) ) {
+                    foreach( $property_value as $v ) {
+                         $realIndex->add($node, $index->field, $v);
+                    }
+                }
+                else {
+                    $realIndex->add($node, $index->field, $property_value);
+                }
             }
         }
 
